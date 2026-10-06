@@ -24,3 +24,12 @@ Every course uses the same layout:
 
 Files are named in lowercase with hyphens, e.g. `week01-introduction-to-computer-security.pdf`.
 In `assignment/`, `task.*` is the brief and `submission.*` is what I handed in.
+
+## Making notes for a new week
+
+1. Put the lecture slides in `<course>/weekNN/lecture/`.
+2. In Claude Code, run `/week-notes <course> weekNN`, for example `/week-notes computer-security week04`.
+
+It reads the slides and writes `notes.md` (every topic in order, the lecture's cases, activities and
+review Q&A with answers, and a "most important for exams" summary), then renders `notes.pdf` next to it.
+The instructions live in [.claude/skills/week-notes/SKILL.md](.claude/skills/week-notes/SKILL.md).

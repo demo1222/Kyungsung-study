@@ -5,7 +5,11 @@ Stallings & Brown, *Computer Security: Principles and Practice* (5th ed.).
 
 | Week | Topic | Lecture | Assignment | Notes |
 |---|---|---|---|---|
-| 01 | Introduction to Computer Security | [slides](week01/lecture/week01-introduction-to-computer-security.pdf) | none | [notes](week01/notes.md) |
-| 02 | Assets, Threats and Risk | [slides](week02/lecture/week02-assets-threats-and-risk.pdf) | [task](week02/assignment/task.pdf), [submission](week02/assignment/submission.pdf) | [notes](week02/notes.md) |
-| 03 | Social Engineering and Phishing | [slides](week03/lecture/week03-social-engineering-and-phishing.pdf) | [example](week03/assignment/task-example-personal-protection-plan.docx), [submission](week03/assignment/submission.pdf) | [notes](week03/notes.md) |
-| 05 | Malware and Endpoint Security | [slides](week05/lecture/week05-malware-and-endpoint-security.pdf) | [submission](week05/assignment/submission.pdf) | [notes](week05/notes.md) |
+| 01 | Introduction to Computer Security | [slides](week01/lecture/week01-introduction-to-computer-security.pdf) | none | [md](week01/notes.md) · [pdf](week01/notes.pdf) |
+| 02 | Assets, Threats and Risk | [slides](week02/lecture/week02-assets-threats-and-risk.pdf) | [task](week02/assignment/task.pdf), [submission](week02/assignment/submission.pdf) | [md](week02/notes.md) · [pdf](week02/notes.pdf) |
+| 03 | Social Engineering and Phishing | [slides](week03/lecture/week03-social-engineering-and-phishing.pdf) | [example](week03/assignment/task-example-personal-protection-plan.docx), [submission](week03/assignment/submission.pdf) | [md](week03/notes.md) · [pdf](week03/notes.pdf) |
+| 04 | — | none yet | none | — |
+| 05 | Malware and Endpoint Security | [slides](week05/lecture/week05-malware-and-endpoint-security.pdf) | [submission](week05/assignment/submission.pdf) | [md](week05/notes.md) · [pdf](week05/notes.pdf) |
+| 06 | Networking Fundamentals for Security | [slides](week06/lecture/week06-networking-fundamentals-for-security.pdf) | none | [md](week06/notes.md) · [pdf](week06/notes.pdf) |
+
+Weeks 07–09 are empty folders waiting for slides.

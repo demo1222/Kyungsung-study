@@ -8,3 +8,4 @@ Stallings & Brown, *Computer Security: Principles and Practice* (5th ed.).
 | 01 | Introduction to Computer Security | [slides](week01/lecture/week01-introduction-to-computer-security.pdf) | none | [notes](week01/notes.md) |
 | 02 | Assets, Threats and Risk | [slides](week02/lecture/week02-assets-threats-and-risk.pdf) | [task](week02/assignment/task.pdf), [submission](week02/assignment/submission.pdf) | [notes](week02/notes.md) |
 | 03 | Social Engineering and Phishing | [slides](week03/lecture/week03-social-engineering-and-phishing.pdf) | [example](week03/assignment/task-example-personal-protection-plan.docx), [submission](week03/assignment/submission.pdf) | [notes](week03/notes.md) |
+| 05 | Malware and Endpoint Security | [slides](week05/lecture/week05-malware-and-endpoint-security.pdf) | [submission](week05/assignment/submission.pdf) | [notes](week05/notes.md) |

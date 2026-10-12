@@ -11,7 +11,7 @@ Lecturer: LIAU, Yee Yeng, Ph.D. — Department of Global IT Engineering.
 | 05 | Communication Protocols and Messaging | [slides](week05/lecture/week05-iot-edge-05.pdf) | none | [md](week05/notes.md) · [pdf](week05/notes.pdf) |
 | 06 | Practical: From Communication to Messaging | [slides](week06/lecture/week06-iot-edge-06.pdf) | none | [md](week06/notes.md) · [pdf](week06/notes.pdf) |
 
-Midterm 1: [study guide](midterm1/iot-midterm-study-guide.pdf). Weeks 07–09 are empty folders waiting for slides.
+Midterm 1: [study guide](midterm1/iot-midterm-study-guide.pdf) (from the lecturer), plus my [add-on](midterm1/iot-midterm-addendum.md) ([pdf](midterm1/iot-midterm-addendum.pdf)) with what that guide leaves out. Weeks 07–09 are empty folders waiting for slides.
 
 The scripts need Python 3 and `matplotlib`. Run them from their own folder so relative data files
 such as `sensor-log.json` are found.

@@ -12,5 +12,7 @@ Reading: Dhamdhere, *Systems Programming and Operating Systems*; Arpaci-Dusseau,
 | 04 | Practice 1: processes and threads | none | [practice-1.pdf](week04/exercises/practice-1.pdf) | [md](week04/notes.md) · [pdf](week04/notes.pdf) |
 | 05 | Chapter III: Memory Management | [slides](week05/lecture/week05-chapter-3-memory-management.pdf) | [task](week05/assignment/task-paging-simulation-using-python.pdf) | [md](week05/notes.md) · [pdf](week05/notes.pdf) |
 
+Midterm 1: [study guide](midterm1/operating-systems-midterm-study-guide.md) ([pdf](midterm1/operating-systems-midterm-study-guide.pdf)), covering chapters I–III, Practice 1 and the labs.
+
 Weeks 06–09 are empty folders waiting for slides.
 The week 03 lab scripts need `psutil` and `matplotlib`.

@@ -12,4 +12,6 @@ Stallings & Brown, *Computer Security: Principles and Practice* (5th ed.).
 | 05 | Malware and Endpoint Security | [slides](week05/lecture/week05-malware-and-endpoint-security.pdf) | [submission](week05/assignment/submission.pdf) | [md](week05/notes.md) · [pdf](week05/notes.pdf) |
 | 06 | Networking Fundamentals for Security | [slides](week06/lecture/week06-networking-fundamentals-for-security.pdf) | none | [md](week06/notes.md) · [pdf](week06/notes.pdf) |
 
+Midterm 1: [study guide](midterm1/computer-security-midterm-study-guide.md) ([pdf](midterm1/computer-security-midterm-study-guide.pdf)), covering weeks 1–3, 5 and 6.
+
 Weeks 07–09 are empty folders waiting for slides.

@@ -4,7 +4,7 @@ My coursework from Kyungsung University (Busan), Fall 2026.
 
 | Course | Topics so far |
 |---|---|
-| [Computer Security](computer-security/README.md) | Security basics and the CIA triad, assets, threats and risk, social engineering and phishing |
+| [Computer Security](computer-security/README.md) | Security basics and the CIA triad, assets, threats and risk, social engineering and phishing, malware and endpoint security |
 | [IoT](iot/README.md) | Virtual sensors, moving averages, data logging, a cold-chain monitoring device |
 | [Operating Systems and System Programming](operating-systems/README.md) | OS basics, Python OS tools, a CPU/memory monitor |
 

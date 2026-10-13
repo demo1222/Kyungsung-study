@@ -1,6 +1,6 @@
 # MIDTERM STUDY GUIDE
 
-**Computer Security** · Weeks 1–3, 5 and 6
+**Computer Security** · Weeks 1–6
 
 *Condensed, comprehensive review for efficient midterm preparation*
 
@@ -8,7 +8,7 @@
 
 > **Scope note**
 >
-> This guide covers every lecture in the repo: weeks 1, 2, 3, 5 and 6. **There are no week 4 slides in the folder.** If a week 4 lecture was given, get those slides before the exam, because nothing here covers it.
+> This guide covers every lecture in the repo: weeks 1 to 6. Week 4 (identity, authentication and access control) was added later from its slides, so it has the same depth as the other weeks.
 
 > **Important exam note**
 >
@@ -18,7 +18,7 @@ Prepared from the week 1–6 slides, my notes and the assignments.
 
 ## How to Use This Guide
 
-This guide replaces re-reading five slide decks. It keeps the lecture order, the lecturer's own terms and every real case, and drops repeated examples.
+This guide replaces re-reading six slide decks. It keeps the lecture order, the lecturer's own terms and every real case, and drops repeated examples.
 
 ### Study in three passes
 
@@ -49,13 +49,13 @@ Each week answers a different question:
 | 1 | What does security protect? | Definition of security, CIA triad, five words, pause-check-report, permission, defense in depth |
 | 2 | What matters, what can harm it, how serious is it? | Four asset types, threat / vulnerability / exploit / control, prevent-detect-recover, MFA, backup vs restore, risk matrix |
 | 3 | How are people attacked? | Social engineering, pretext vs action, six levers, phishing family, warning signs, reporting routes |
-| 4 | (no slides in the repo) | — |
+| 4 | Who is asking, and is this request allowed? | Identification / authentication / authorization, account / session / permission, online vs offline guessing, salt and Argon2id, MFA factor types, roles and scope, horizontal vs vertical failure, least privilege |
 | 5 | How is a device attacked? | Six malware categories, seven infection paths, endpoint controls, trusted-state recovery |
 | 6 | Where does data travel, and where does security matter? | LAN/WAN, switch/AP/router, IP/port/protocol/DNS, HTTPS boundary, evil twin, firewall, segmentation |
 
 > **Key distinction**
 >
-> Week 2 gives the **framework**. Week 3 applies it to **people**, week 5 to **devices**, week 6 to **networks**. The same answer pattern works everywhere: **location or asset → weakness → control**.
+> Week 2 gives the **framework**. Week 3 applies it to **people**, week 4 to **accounts**, week 5 to **devices**, week 6 to **networks**. The same answer pattern works everywhere: **location or asset → weakness → control**.
 
 ## Week 1 - Introduction to Computer Security
 
@@ -430,6 +430,269 @@ A verification route is **independent** when you obtained it **separately** from
 
 Respond supportively ("Thank you for telling me"). **Shame makes people hide information and delay help.**
 
+## Week 4 - Identity and Accounts
+
+The lecture is built on three security decisions: **how can access be compromised** (identity and accounts), **which control stops which attack** (passwords and MFA), and **why should this request be allowed** (roles and permissions).
+
+### Identification, authentication, authorization
+
+| Check | Meaning | Campus example |
+|---|---|---|
+| **Identification** | An account **claim** | "I am mina.student." |
+| **Authentication** | **Proof** for that account | The accepted proof matches. |
+| **Authorization** | **Permission** for that action | Mina requests a grade edit. |
+
+> **Key idea**
+>
+> **An accepted password can belong to the wrong person.** Authentication only shows that the proof matched the account, not that the real owner typed it.
+
+### Case: Mina's password was stolen
+
+A stranger signs in as Mina, a student. The slides ask three questions and the lecture answers them section by section. *(The slides do not print the answers; these follow from the three checks above.)*
+
+| Question | Answer |
+|---|---|
+| Which security check accepted the stranger? | **Authentication.** The stolen password was valid proof for Mina's account. |
+| Should the account be able to change grades? | **No.** That is **authorization**: a student role reads its own record and edits nothing, whoever is signed in. |
+| What evidence would you collect? | The **access log**: sign-in time, the account, each event and the decision (allow or deny), plus active sessions. |
+
+### An account, a session and a permission
+
+| Item | Purpose | Failure example |
+|---|---|---|
+| **Account record** | Stores role, status and scope | A former TA stays active |
+| **Session** | Recognizes later requests | A stolen session is reused |
+| **Permission check** | Decides access to a resource | One student reads another's data |
+
+A successful sign-in **does not settle every later request**. Each request still needs its own permission check.
+
+### Common routes into an account
+
+| Route | What the attacker uses | A relevant defense |
+|---|---|---|
+| **Password guessing** | Likely password candidates | Attempt limits and strong passwords |
+| **Credential stuffing** | A pair leaked from **another site** | A unique password per service |
+| **Phishing** | A deceptive request for proof | Phishing-resistant authentication |
+| **Recovery or session abuse** | A weak recovery path or a stolen session | Secure recovery and session controls |
+
+> **Do not confuse**
+>
+> **Guessing** tries likely candidates. **Credential stuffing** does not guess: it reuses a username and password pair that already leaked somewhere else, so it works only when you **reused** the password.
+
+### The cost of guessing
+
+| PIN length | Possible values |
+|---|---|
+| Four digits | **10,000** (includes leading zeroes) |
+| Six digits | **1,000,000** |
+
+The time to guess also depends on the **guessing rate** and the **defenses**, not only on the number of possibilities.
+
+### Online guessing vs offline guessing
+
+| | Online | Offline |
+|---|---|---|
+| Where guesses go | To the **login service** | To a **copied hash** on the attacker's device |
+| What can slow them | Server attempt limits and monitoring | A costly password-hashing scheme |
+| Does login MFA help? | It can block account entry | It does **not** prevent hash testing |
+
+### Activity: a hash as the target (CyberChef)
+
+A fictional database contains one SHA-256 value. You hash each word of a candidate list (a **dictionary**) in CyberChef (SHA2, size 256, 64 rounds) and compare the **complete** output with the target.
+
+| Candidate | SHA-256 starts with | Full target match |
+|---|---|---|
+| 123456 | `8d969eef6eca…` | No |
+| password | `5e884898da28…` | No |
+| welcome | `280d44ab1e9f…` | No |
+| campus123 | `4cb48ed6cefe…` | **Yes** |
+
+> **High-yield**
+>
+> **The guess produced a match. The hash was not decrypted.** A hash is one-way: the attacker hashes guesses until one equals the target. And a short list that fails **does not prove a password is safe**; it only shows those few words were wrong.
+
+### Test your knowledge (slide questions)
+
+*(The slides give no answers; these follow from the tables above.)*
+
+| Question | Answer |
+|---|---|
+| Why can login rate limits fail to stop offline guessing? | Offline guesses never reach the login service. They run against a copied hash on the attacker's own device, so the server's limits are never asked. |
+| How does credential stuffing differ from guessing? | Guessing tries likely candidates; stuffing uses a real pair leaked from another site. |
+| A correct password opens someone else's record. Which additional check failed? | **Authorization** (the permission check): authentication passed, but the resource did not belong to that account. |
+
+## Week 4 - Passwords and Stronger Proof
+
+A strong sign-in needs both **good credentials** and **correct enforcement**.
+
+### Long, unique passwords
+
+| Property | Meaning |
+|---|---|
+| **Length** | Prefer a long, randomly generated password |
+| **Uniqueness** | A different password for each service |
+| **Predictability** | `Campus2026!` follows a recognizable pattern (word + year + symbol), so it is easy to guess |
+
+**NIST SP 800-63B-4:** minimum **15 characters** for password-only sign-in. A password used **within MFA** may have a minimum of **8**.
+
+### A password manager makes uniqueness practical
+
+`Generate: a different random password for each login → Store: keep them in a protected vault → Protect the vault: strong master secret and available MFA`
+
+### Password storage that slows guessing
+
+| Storage choice | What it changes |
+|---|---|
+| **Unique random salt** per password | Identical passwords do not share a reusable hash |
+| A **password-hashing scheme**, such as **Argon2id** | Each guess consumes configured time and memory |
+| **Fast SHA-256 alone**, as in the demo | Allows rapid guesses; it illustrates the weakness |
+
+> **Do not confuse**
+>
+> A **salt is stored with the hash and does not have to be secret.** Its job is to make every hash different, not to hide anything. The slowness comes from the hashing scheme (Argon2id), not from the salt.
+
+### Password reuse spreads one breach
+
+| Fictional service | Password choice | After the forum password leaks |
+|---|---|---|
+| Student forum | Same password as the LMS | Forum access is at risk |
+| LMS | Reused forum password | The leaked pair may work here too |
+| Email | Different generated password | The leaked password does not match |
+
+MFA adds another check if a stolen password is tried.
+
+### MFA uses different factor types
+
+| Factor type | Examples |
+|---|---|
+| Something you **know** | Password, PIN, security answer |
+| Something you **have** | Phone, authenticator app, hardware security key |
+| Something you **are** | Fingerprint, face recognition |
+
+| Sign-in combination | Factor types | MFA? |
+|---|---|---|
+| Password and security question | Know + know | **No** |
+| Password and authenticator-app code | Know + have | Yes |
+| Security key activated with its PIN | Have + know | Yes |
+
+> **Trap**
+>
+> **Two screens can still ask for the same kind of proof.** MFA means two **different factor types**, not two steps.
+
+### MFA methods face different attacks
+
+| Method or issue | What to remember |
+|---|---|
+| Typed one-time code | A deceptive site may **relay** it |
+| Unexpected approval prompt | **Deny it** and investigate through the official service (this is the Uber MFA-fatigue pattern from weeks 2 and 3) |
+| Passkey or FIDO security key | Cryptographic proof **binds authentication to the service** (why Cloudflare's keys held in week 2) |
+| Faulty server enforcement | The app may accept access **before MFA is complete** |
+
+### Activity: access before MFA is complete
+
+PortSwigger lab "2FA simple bypass". The lab supplies a valid password, but the second-factor code is unavailable. Prediction asked: will the protected account page open?
+
+| Observed stage | Expected in this vulnerable lab |
+|---|---|
+| Password stage | Accepted |
+| Verification-code stage | No code supplied |
+| Direct request for the protected page | **Account page opens** |
+
+**The application failed to require completed MFA.** The fix is a check on the protected route itself:
+
+| Session state | Protected account page |
+|---|---|
+| No authenticated session | Deny or send to sign-in |
+| Password accepted, MFA still pending | Require the second factor |
+| MFA complete and permission valid | Allow this request |
+
+> **Key idea**
+>
+> **A verification screen alone does not enforce the rule.** Showing an MFA page is not the same as refusing every protected page until MFA is finished.
+
+### Recovery and response also protect the account
+
+| When | What to do |
+|---|---|
+| Before an incident | Protect the recovery email and store backup codes securely |
+| When access looks wrong | Use the **official service** to change exposed credentials and **revoke unfamiliar sessions** |
+| After containment | Review recovery methods, MFA enrollment and activity |
+
+## Week 4 - Roles and Permissions
+
+Each request needs the right **action**, **resource** and **scope**.
+
+### One request, three policy questions
+
+`Subject: Mina's signed-in student account → Action: read → Resource: Joon's grade record in section B`
+
+The question to ask every time: **does the policy allow this subject to perform this action here?**
+
+### Roles grant actions. Scope limits resources.
+
+| Role | Read grades | Edit grades |
+|---|---|---|
+| Student | Own record | No |
+| Teaching assistant | Assigned section | Assigned section |
+| Lecturer | Assigned course | Assigned course |
+| Disabled account | No | No |
+
+### Horizontal and vertical access failures
+
+| Failure | Example | Missing boundary |
+|---|---|---|
+| **Horizontal** | Mina reads Joon's record | Another **user's resource** (same level) |
+| **Vertical** | A student changes course grades | A **more privileged action** (higher level) |
+
+### Activity: another user's account data
+
+PortSwigger lab "User ID controlled by request parameter". You sign in with the supplied test account, then change the user ID in the request.
+
+| Request | Signed-in account | Requested account |
+|---|---|---|
+| Original | wiener | wiener |
+| Changed user ID | wiener | carlos |
+
+Expected vulnerable result: **another account's API key appears**. The session and the resource differ, so the failed check concerns **ownership of the requested resource**. This is a **horizontal** failure.
+
+### Least privilege limits the possible damage
+
+**Least privilege** = each account gets only the access its assignment needs.
+
+| Assignment | Access needed | Access to deny |
+|---|---|---|
+| Student checks a result | Read own grade | Edit grades |
+| TA grades section A | Edit assigned section | Edit section B |
+| Lecturer teaches one course | Manage that course's grades | Manage unrelated courses |
+
+### Access changes when the assignment changes
+
+`Join: create a personal account, approve required access → Change: replace old scope when duties or courses change → Leave: remove access and revoke applicable sessions`
+
+A **shared login makes individual accountability harder**: the log shows the account, not which person used it.
+
+### An access log reveals the failed boundary
+
+| Time | Account | Event | Decision |
+|---|---|---|---|
+| 10:01 | mina.student | Password sign-in | Success |
+| 10:02 | mina.student | Read Mina's grade | Allow |
+| 10:03 | mina.student | Read Joon's grade | **Allow** |
+| 10:04 | mina.student | Edit Joon's grade | Deny |
+
+The slide asks which row conflicts with the policy and what the log can prove. *(The slides give no answer; this follows from the role table.)*
+
+- **Row 10:03 conflicts.** A student may read only their **own** record, so reading Joon's grade should be denied. It is a **horizontal** failure. Row 10:04 is correct: the vertical boundary held.
+- **What the log proves:** which **account** did what, when, and what the system decided. It does **not** prove that the **person** was Mina, because the password may have been stolen.
+
+### Three ideas to keep
+
+| Idea | One sentence |
+|---|---|
+| Identity | An account claim needs verified proof. |
+| Authentication | Unique secrets and correctly enforced MFA protect sign-in. |
+| Authorization | Every request needs permission within its allowed scope. |
+
 ## Week 5 - Malware Categories
 
 **Malware** = software intentionally designed to cause harm: steal information, disrupt service, spy, gain control, or enable later attacks.
@@ -712,6 +975,16 @@ A warning does not say **where** the problem is. It could be the **device** (wro
 | Integrity vs availability | Correct and complete vs usable when needed. A corrupted file can lose both. |
 | Authentication vs authorization | Who are you vs what may you do. |
 | Recognition vs authorization | "Looks like my manager" vs "passed our approval process". |
+| Identification vs authentication | The account **claim** ("I am mina.student") vs the **proof** for that account. |
+| Account vs session | The stored record (role, status, scope) vs what recognizes your later requests after sign-in. |
+| Password guessing vs credential stuffing | Trying likely candidates vs reusing a pair leaked from another site. |
+| Online vs offline guessing | Guesses sent to the login service (rate limits help) vs tested against a copied hash (only costly hashing helps). |
+| Matching a hash vs decrypting it | A guess was hashed and compared; nothing was reversed. |
+| Salt vs password-hashing scheme | Makes identical passwords hash differently (not secret) vs makes each guess slow (Argon2id). |
+| Two steps vs two factors | Password + security question is know + know, so it is **not** MFA. |
+| MFA screen vs MFA enforcement | Showing a code page vs refusing protected pages until MFA is complete. |
+| Role vs scope | Which **actions** are granted vs which **resources** they apply to. |
+| Horizontal vs vertical failure | Another user's resource at the same level vs a more privileged action. |
 | Pretext vs requested action | The invented story vs what they want you to do. |
 | Phishing vs spear phishing | General message to many vs tailored to a person or group. |
 | Smishing vs vishing | Text channel vs voice channel. |
@@ -753,11 +1026,17 @@ Model: *Equifax. Asset: personal information. Threat: attackers. Vulnerability: 
 
 `Name the pretext → Name the levers → Name the requested action → Give the independent check → Give the reporting route`
 
-### 5. "What malware is this?" / "Trace the infection"
+### 5. "Which check failed?" / "Should this request be allowed?"
+
+`Identification: who is claimed → Authentication: was the proof accepted → Authorization: subject, action, resource, scope → Name the failed check → Control that fits`
+
+Model: *Mina reads Joon's grade. Authentication passed. Authorization failed: a student may read only their own record. Horizontal failure. Control: check ownership of the requested resource on every request.* For a password question, first say whether the guessing is **online** or **offline**, because the control is different.
+
+### 6. "What malware is this?" / "Trace the infection"
 
 `Behavior → Category → What evidence would confirm it → Path: contact, execution, privilege, persistence, impact → Control per stage → Trusted-state recovery`
 
-### 6. "Where is the network risk?"
+### 7. "Where is the network risk?"
 
 `Location → Weakness → Control that fits that location`
 
@@ -793,22 +1072,34 @@ Try to answer without looking back. These are review questions, not copies of th
 24. Which address is fake and why: `login.campus.example` or `campus.example.verify-now.test`?
 25. Which Korean reporting route fits: (a) money already sent, (b) a suspicious SMS, (c) a strange campus-account email?
 26. What makes a verification route independent?
-27. How is a worm different from a virus?
-28. What is a Trojan? Give the slide example.
-29. A laptop is slow and nothing else is known. What malware is it?
-30. Name four of the seven infection paths.
-31. Write the six stages of an infection story.
-32. Why may a connected backup be useless against ransomware?
-33. What five conditions make recovery complete?
-34. Why is antivirus not enough?
-35. What is the difference between a switch and a router?
-36. The Internet is down. Can you still print to the lab printer? Why?
-37. What do an IP address, a port, a protocol and DNS each answer?
-38. Name two things HTTPS does **not** protect against.
-39. What is an evil twin, and what should you do at a certificate warning?
-40. Does DNS spoofing defeat TLS? Explain.
-41. Authentication vs authorization?
-42. How does segmentation reduce harm?
+27. Define identification, authentication and authorization with the Mina example.
+28. A stranger signs in with Mina's stolen password. Which check accepted them?
+29. How does credential stuffing differ from password guessing, and which defense fits each?
+30. Why do login rate limits not stop offline guessing?
+31. In the CyberChef activity, `campus123` matched the target. Was the hash decrypted?
+32. What does a salt do, and does it have to be secret?
+33. What minimum password lengths does NIST SP 800-63B-4 give?
+34. Is a password plus a security question MFA? Why?
+35. In the 2FA bypass lab, what did the application fail to do?
+36. Mina reads Joon's grade; a student changes course grades. Which failure is horizontal and which is vertical?
+37. What is least privilege? Give the TA example.
+38. In the access log, which row conflicts with the policy, and what can the log not prove?
+39. How is a worm different from a virus?
+40. What is a Trojan? Give the slide example.
+41. A laptop is slow and nothing else is known. What malware is it?
+42. Name four of the seven infection paths.
+43. Write the six stages of an infection story.
+44. Why may a connected backup be useless against ransomware?
+45. What five conditions make recovery complete?
+46. Why is antivirus not enough?
+47. What is the difference between a switch and a router?
+48. The Internet is down. Can you still print to the lab printer? Why?
+49. What do an IP address, a port, a protocol and DNS each answer?
+50. Name two things HTTPS does **not** protect against.
+51. What is an evil twin, and what should you do at a certificate warning?
+52. Does DNS spoofing defeat TLS? Explain.
+53. Authentication vs authorization?
+54. How does segmentation reduce harm?
 
 ## Self-Check Answers
 
@@ -838,22 +1129,34 @@ Try to answer without looking back. These are review questions, not copies of th
 24. The second: reading from the right, it belongs to `verify-now.test`.
 25. (a) 112 and the bank, request payment suspension. (b) 118 KISA. (c) University IT.
 26. You obtained it separately from the suspicious contact.
-27. A worm propagates through networks by itself; a virus depends on a user executing or sharing an infected file.
-28. Malware disguised as legitimate or useful software. SocGholish, a fake browser update.
-29. Unknown. A symptom is not evidence; you need scan, process, network or configuration findings.
-30. Any four of: malicious messages, untrusted downloads, unpatched vulnerabilities, excess privilege, removable media, weak configuration, supply chain.
-31. Initial contact, execution, privilege, persistence, impact, recovery.
-32. Ransomware can encrypt it too. Backups must be protected, separated and tested.
-33. Clean system, weakness fixed, credentials safe, data restored, monitored afterwards.
-34. No tool detects every threat; protection also needs configuration, updates, least privilege, backups and users.
-35. A switch forwards frames inside a LAN; a router forwards packets between networks.
-36. Yes. The print path (laptop → AP → switch → printer) never leaves the LAN.
-37. IP: where is it. Port: which service. Protocol: which rules. DNS: which address matches the name.
-38. Any two of: a dishonest site owner (phishing sites use HTTPS), malware on your own device, visibility of IP addresses and traffic timing.
-39. A fake access point imitating a trusted Wi-Fi name. Stop; do not click through the warning.
-40. Not by itself. It can redirect traffic, but the fake server must still present a valid certificate for the name.
-41. Authentication checks who you are; authorization checks what you may do.
-42. It limits unnecessary communication between groups, so an incident cannot spread freely.
+27. Identification is the account claim ("I am mina.student"). Authentication is the proof for that account. Authorization is permission for the action (a grade edit).
+28. Authentication: the stolen password was valid proof. An accepted password can belong to the wrong person.
+29. Guessing tries likely candidates (defense: attempt limits and strong passwords). Stuffing reuses a pair leaked from another site (defense: a unique password per service).
+30. The guesses go to a copied hash on the attacker's device, never to the login service. Only a costly password-hashing scheme slows them.
+31. No. The guess was hashed and its full output equalled the target. Hashes are matched, not decrypted.
+32. It makes identical passwords produce different hashes, so one hash is not reusable. It is stored with the hash and does not have to be secret.
+33. 15 characters for password-only sign-in; 8 when the password is used within MFA.
+34. No. Both are something you know (know + know). MFA needs different factor types.
+35. It did not require completed MFA: a direct request for the protected page opened it after the password stage only.
+36. Reading Joon's record is horizontal (another user's resource). A student changing grades is vertical (a more privileged action).
+37. Give only the access the assignment needs. A TA grading section A may edit the assigned section and is denied section B.
+38. Row 10:03, read Joon's grade: Allow. A student may read only their own record. The log proves what the account did, not that the person was Mina.
+39. A worm propagates through networks by itself; a virus depends on a user executing or sharing an infected file.
+40. Malware disguised as legitimate or useful software. SocGholish, a fake browser update.
+41. Unknown. A symptom is not evidence; you need scan, process, network or configuration findings.
+42. Any four of: malicious messages, untrusted downloads, unpatched vulnerabilities, excess privilege, removable media, weak configuration, supply chain.
+43. Initial contact, execution, privilege, persistence, impact, recovery.
+44. Ransomware can encrypt it too. Backups must be protected, separated and tested.
+45. Clean system, weakness fixed, credentials safe, data restored, monitored afterwards.
+46. No tool detects every threat; protection also needs configuration, updates, least privilege, backups and users.
+47. A switch forwards frames inside a LAN; a router forwards packets between networks.
+48. Yes. The print path (laptop → AP → switch → printer) never leaves the LAN.
+49. IP: where is it. Port: which service. Protocol: which rules. DNS: which address matches the name.
+50. Any two of: a dishonest site owner (phishing sites use HTTPS), malware on your own device, visibility of IP addresses and traffic timing.
+51. A fake access point imitating a trusted Wi-Fi name. Stop; do not click through the warning.
+52. Not by itself. It can redirect traffic, but the fake server must still present a valid certificate for the name.
+53. Authentication checks who you are; authorization checks what you may do.
+54. It limits unnecessary communication between groups, so an incident cannot spread freely.
 
 ## Final 15-Minute Revision Checklist
 
@@ -875,6 +1178,14 @@ Try to answer without looking back. These are review questions, not copies of th
 | Tell the Korean call, Twilio, Changwon and Hong Kong cases with one lesson each. | ☐ |
 | Read a hostname from the right; explain why HTTPS and logos prove little. | ☐ |
 | Give the Korean reporting routes (112 + bank, 118 KISA, university IT) and the "already acted" responses. | ☐ |
+| Separate identification, authentication and authorization, and account, session and permission check. | ☐ |
+| Give the four routes into an account with a defense for each. | ☐ |
+| Compare online and offline guessing; explain why a hash match is not decryption. | ☐ |
+| Explain salt, Argon2id, the NIST 15 / 8 character minimums and what a password manager does. | ☐ |
+| Name the three factor types and decide whether a sign-in combination is MFA. | ☐ |
+| Explain the 2FA bypass lab: the protected route must check MFA state. | ☐ |
+| Reproduce the role table; classify a failure as horizontal or vertical; explain least privilege and join / change / leave. | ☐ |
+| Read an access log: find the row that breaks the policy and say what the log can and cannot prove. | ☐ |
 | Define the six malware categories with the slide example for each. | ☐ |
 | Explain virus vs worm and why WannaCry is both ransomware and worm. | ☐ |
 | List the seven infection paths with a control for each. | ☐ |

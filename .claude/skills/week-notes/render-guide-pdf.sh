@@ -11,6 +11,8 @@ set -euo pipefail
 
 EDGE="${EDGE:-/c/Program Files (x86)/Microsoft/Edge/Application/msedge.exe}"
 [ -x "$EDGE" ] || EDGE="/c/Program Files/Google/Chrome/Application/chrome.exe"
+[ -x "$EDGE" ] || EDGE="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+[ -x "$EDGE" ] || EDGE="/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge"
 TMP="$(mktemp -d)"
 trap 'rm -rf "$TMP" 2>/dev/null || true' EXIT
 
@@ -94,8 +96,14 @@ out.querySelectorAll('blockquote').forEach(function (b) {
 EOF
 
   rm -f "$pdf"
+  # Windows (Git Bash) needs Windows-style paths; macOS and Linux use the paths as they are.
+  if command -v cygpath >/dev/null 2>&1; then
+    out="$(cygpath -w "$(realpath -m "$pdf")")"; url="file:///$(cygpath -m "$html")"
+  else
+    out="$(cd "$(dirname "$pdf")" && pwd)/$(basename "$pdf")"; url="file://$html"
+  fi
   "$EDGE" --headless=new --disable-gpu --no-pdf-header-footer --virtual-time-budget=15000 \
-    --print-to-pdf="$(cygpath -w "$(realpath -m "$pdf")")" "file:///$(cygpath -m "$html")" 2>/dev/null || true
+    --print-to-pdf="$out" "$url" 2>/dev/null || true
   # Edge can return before the PDF is written, so wait for it (up to 60 s) before cleaning up.
   for _ in $(seq 60); do [ -s "$pdf" ] && break; sleep 1; done
   [ -s "$pdf" ] || { echo "failed to render $pdf" >&2; exit 1; }

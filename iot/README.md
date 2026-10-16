@@ -13,5 +13,7 @@ Lecturer: LIAU, Yee Yeng, Ph.D. — Department of Global IT Engineering.
 
 Midterm 1: [study guide](midterm1/iot-midterm-study-guide.pdf) (from the lecturer), plus my [add-on](midterm1/iot-midterm-addendum.md) ([pdf](midterm1/iot-midterm-addendum.pdf)) with what that guide leaves out. Weeks 07–09 are empty folders waiting for slides.
 
+Midterm practice (weeks 1–6, answers at the end of each PDF): [main mock assignment](midterm1/practice/1-MAIN-iot-mock-assignment-weeks1-6.pdf) in the same format as the teacher's *Individual assignment 1*, and [extra practice bank](midterm1/practice/2-EXTRA-iot-practice-bank-weeks1-6.pdf) (a second mock paper + 293 questions).
+
 The scripts need Python 3 and `matplotlib`. Run them from their own folder so relative data files
 such as `sensor-log.json` are found.

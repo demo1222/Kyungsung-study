@@ -14,4 +14,6 @@ Stallings & Brown, *Computer Security: Principles and Practice* (5th ed.).
 
 Midterm 1: [study guide](midterm1/computer-security-midterm-study-guide.md) ([pdf](midterm1/computer-security-midterm-study-guide.pdf)), covering weeks 1–6.
 
+Midterm practice (weeks 1–6, answers at the end of each PDF): [main multiple-choice test](midterm1/practice/1-MAIN-computer-security-mc-test-weeks1-6.pdf) (60 questions) and [extra practice bank](midterm1/practice/2-EXTRA-computer-security-practice-bank-weeks1-6.pdf) (343 questions).
+
 Weeks 07–09 are empty folders waiting for slides.

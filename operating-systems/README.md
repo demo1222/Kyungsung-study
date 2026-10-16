@@ -14,5 +14,7 @@ Reading: Dhamdhere, *Systems Programming and Operating Systems*; Arpaci-Dusseau,
 
 Midterm 1: [study guide](midterm1/operating-systems-midterm-study-guide.md) ([pdf](midterm1/operating-systems-midterm-study-guide.pdf)), covering chapters I–III, Practice 1 and the labs.
 
+Midterm practice (weeks 1–6, answers at the end of each PDF): [main multiple-choice test](midterm1/practice/1-MAIN-operating-systems-mc-test-weeks1-6.pdf) (65 questions) and [extra practice bank](midterm1/practice/2-EXTRA-operating-systems-practice-bank-weeks1-6.pdf) (310 questions, incl. page-replacement traces).
+
 Weeks 06–09 are empty folders waiting for slides.
 The week 03 lab scripts need `psutil` and `matplotlib`.
